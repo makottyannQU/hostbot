@@ -40,9 +40,10 @@ s = Session()
 
 # # marge tables user,meal,order
 # user_id='U6c8f1bb0cfb39e08bb5052f6d6fb632d'
+# ym='201908'
 # query = f'''
-#         select order1.date, "user".name, "meal".name, "meal".price  from ( select * from "order" where user_id = '{user_id}' )
-#         as order1 inner join "meal" on order1.meal_id = "meal".id inner join "user" on order1.user_id = "user".id ;
+#         select menu.date, "meal".name  from ( select * from "menu" where date between {ym}00 and {ym}32)
+#         as menu inner join "meal" on menu.meal_id = "meal".id;
 #         '''
 # df = pd.read_sql(query, db_engine)
 # print(df)
