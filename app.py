@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, request, abort, redirect, render_template, url_for
 import pandas as pd
+import pymysql
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import numpy as np
@@ -11,8 +12,9 @@ import os
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, FollowEvent, UnfollowEvent
-import psycopg2  # for psql in heroku
 import jpholiday
+import psycopg2  # for psql in heroku
+
 
 import settings
 from models import *
