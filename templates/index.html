@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container main" style=" margin-top: 50px;">
+    <div id="wrap">
+        <div id="mini-calendar"></div>
+    </div>
+</div>
+<button hidden id="modal_button" type="button" data-toggle="modal" data-target="#modal1">
+</button>
+<button hidden id="modal_edit_button" type="button" data-toggle="modal" data-target="#modal2">
+</button>
+<script src="/static/jquery.minicalendar.js"></script>
+<script src="/static/menu.js"></script>
+<script src="/static/menu_edit.js"></script>
+<input hidden id = "registration_error" value ="{{ error }}">
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="label1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_title">Modal title</h5>
+            </div>
+            <div class="modal-body">
+                <form class="form" name="addmenu" method="post" action="/addmenu">
+                    <input type="hidden" id="date_for_register" name="date" value="">
+                    <table>
+                        <tbody>
+                            <tr id="meal_tr1" class="meal_tr" style="margin: 10px;">
+                                <td id="meal_td1" class="meal_td" style="padding-right: 30px;"><select name="meal"
+                                        id="meal1" class="form-control" onChange="changemeal(this);">
+                                        <option value="">未選択</option>
+                                    </select>
+                                </td>
+                                <td id="check_meal1"></td>
+                            </tr>
+                            <tr id="meal_tr2" class="meal_tr" style="margin: 10px;">
+                            </tr>
+                            <tr id="meal_tr3" class="meal_tr" style="margin: 10px;">
+                            </tr>
+                            <tr id="meal_tr4" class="meal_tr" style="margin: 10px;"></tr>
+                            <tr id="meal_tr5" class="meal_tr" style="margin: 10px;"></tr>
+                            <tr style="margin: 10px;">
+                                <td>
+                                    <a href="javascript: void(0);" onclick="plus_meal();"
+                                        style="font-size: 18px;">＋お弁当追加</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <input type="submit" name="submit" class="btn btn-info btn-md" style="float: right" value="登録">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="label1" aria-hidden="true">
+    <div class="modal-dialog　modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_title2">Modal title</h5>
+            </div>
+            <div class="modal-body">
+                <form class="form" id="menu_edit_form"name="addmenu" method="post" action="/editmenu">
+                    <input type="hidden" id="date_for_register_edit" name="date" value="">
+                    <input type="hidden" id="menu_count" name="menu_count" value="">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>
+                                    メニュー
+                                </th>
+                                <th>
+                                    S
+                                </th>
+                                <th>
+                                    M
+                                </th>
+                                <th>
+                                    L
+                                </th>
+                                <th>
+                                    
+                                </th>
+                            </tr>
+                            <tr id="edit_meal_tr1" class="edit_meal_tr" style="margin: 10px;">
+                            </tr>
+                            <tr id="edit_meal_tr2" class="edit_meal_tr" style="margin: 10px;">
+                            </tr>
+                            <tr id="edit_meal_tr3" class="edit_meal_tr" style="margin: 10px;">
+                            </tr>
+                            <tr id="edit_meal_tr4" class="edit_meal_tr" style="margin: 10px;"></tr>
+                            <tr id="edit_meal_tr5" class="edit_meal_tr" style="margin: 10px;"></tr>
+                            <tr style="margin: 10px;">
+                                <td>
+                                    <a href="javascript: void(0);" onclick="plus_meal_editmode();"
+                                        style="font-size: 18px;">＋お弁当追加</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <!-- <input type="button" name="submit" class="btn btn-info btn-md" onclick ="submit_click()" style="float: right" value="登録">                     -->
+                    <input  type="submit" id="edit_submit" name="submit" class="btn btn-info btn-md" style="float: right" value="登録">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+{% endblock %}

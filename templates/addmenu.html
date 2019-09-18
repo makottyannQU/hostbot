@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container main" style=" margin-top: 50px;">
+    <div class="login-box col-md-12">
+        {% if error %}
+        <label style="color:#ff0000;">{{ error }}</label>
+        {% endif %}
+        <h2 id="title"></h2>
+        <form class="form" name="addmenu" method="post" action="/addmenu">
+            <input type="hidden" name="date" value="{{ date }}">
+            <table>
+                <tbody>
+                    <tr id="meal_tr1" class="meal_tr" style="margin: 10px;">
+                        <td id="meal_td1" class="meal_td" style="padding-right: 30px;"><select name="meal" id="meal1"
+                                class="form-control" onChange="changemeal(this);">
+                                <option value="">未選択</option>
+                            </select>
+                        </td>
+                        <td id="check_meal1"></td>
+                    </tr>
+                    <tr id="meal_tr2" class="meal_tr" style="margin: 10px;"></tr>
+                    <tr id="meal_tr3" class="meal_tr" style="margin: 10px;"></tr>
+                    <tr id="meal_tr4" class="meal_tr" style="margin: 10px;"></tr>
+                    <tr id="meal_tr5" class="meal_tr" style="margin: 10px;"></tr>
+                    <tr style="margin: 10px;">
+                        <td>
+                            <a href="javascript: void(0);" onclick="plus_meal();" style="font-size: 18px;">＋お弁当追加</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <input type="submit" name="submit" class="btn btn-info btn-md" style="float: right" value="登録">
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var date = {{ date }};
+    date = date.toString(10);
+    var year = date.slice(0, 4);
+    var month = date.slice(4, 6);
+    var day = date.slice(6, 8);
+    $('#title').html(year + '年 ' + month + '月 ' + day + '日' + 'のメニュー');
+
+    var meals = [];
+
+    $.ajax({
+        url: '/get_meals',
+        type: 'get',
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            meals = data;
+        }
+    });
+
+    var select = $('#meal1');
+    for (let row of meals) {
+        var op = document.createElement("option");
+        op.value = row.id;
+        op.text = row.name;
+        select.append(op);
+    }
+
+    var plus_meal = function () {
+        var count = $('.meal_td').length;
+        count += 1
+
+        // 新しいtr要素を生成
+        var tr_new = '<td id="meal_td' + (count) + ' " class="meal_td" style="padding-right: 30px;"><select class="form-control" name="meal" id="meal' + (count) + '" onChange="changemeal(this);"><option value="">未選択</option></select></td><td id="check_meal' + (count) + '"></td>';
+
+        document.getElementById('meal_tr' + (count)).innerHTML = tr_new;
+
+        var select = $('#meal' + (count));
+        for (let row of meals) {
+            var op = document.createElement("option");
+            op.value = row.id;
+            op.text = row.name;
+            select.append(op);
+        }
+    }
+
+
+    function changemeal(obj) {
+        var id = obj.id;
+        var check = $('#check_' + id);
+        check.empty();
+        var i = obj.selectedIndex;
+        var value = obj.options[i].value;
+        var s_price = 0;
+        var m_price = 0;
+        var l_price = 0;
+        for (let row of meals) {
+            if (value == row.id) {
+                s_price = row.s_price;
+                m_price = row.m_price;
+                l_price = row.l_price;
+            }
+        }
+        if (s_price > 0) {
+            check.append('&emsp;小&emsp;<input type="checkbox" name="check_meal" class="large_checkbox" value="s' + id + '" checked>&emsp;&emsp;');
+        } else {
+            check.append('&emsp;小&emsp;<input type="checkbox" name="check_meal" class="large_checkbox" value="s' + id + '"  disabled="disabled" >&emsp;&emsp;');
+        }
+        if (m_price > 0) {
+            check.append('&emsp;中&emsp;<input type="checkbox" name="check_meal" class="large_checkbox" value="m' + id + '" checked>&emsp;&emsp;');
+        }
+        if (m_price > 0) {
+            check.append('&emsp;大&emsp;<input type="checkbox" name="check_meal"  class="large_checkbox"value="l' + id + '" checked>');
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<div class="table-responsive" style=" margin-top: 50px;">
+    <h1>menu</h1>
+    <table class="table table-striped">
+        <thread>
+            <tr>
+                <th>日付</th>
+                <th>弁当ID</th>
+                <th>小</th>
+                <th>中</th>
+                <th>大</th>
+                <th>タイムスタンプ</th>
+            </tr>
+        </thread>
+        <tbody>
+            {% for x in menu %}
+            <tr>
+                <td>{{ x.date }}</td>
+                <td>{{ x.meal_id }}</td>
+                <td>{{ x.s_stock }}</td>
+                <td>{{ x.m_stock }}</td>
+                <td>{{ x.l_stock }}</td>
+                <td>{{ x.timestamp }}</td>
+            </tr>
+            {% else %}
+            <td>no entry exist!</td>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h1>meals</h1>
+    <table class="table table-striped">
+        <thread>
+            <tr>
+                <th>弁当ID</th>
+                <th>弁当名</th>
+                <th>画像ファイルへの相対パス</th>
+                <th>小</th>
+                <th>中</th>
+                <th>大</th>
+            </tr>
+        </thread>
+        <tbody>
+            {% for x in meals %}
+            <tr>
+                <td>{{ x.id }}</td>
+                <td>{{ x.name }}</td>
+                <td>{{ x.image }}</td>
+                <td>{{ x.s_price }}</td>
+                <td>{{ x.m_price }}</td>
+                <td>{{ x.l_price }}</td>
+            </tr>
+            {% else %}
+            <td>no entry exist!</td>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+
+
+{% endblock %}

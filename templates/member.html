@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container main" style=" margin-top: 50px;">
+    <div class="login-box col-md-12">
+        <div class="table-responsive" style=" margin-top: 50px;">
+            <h1>メンバー</h1>
+            <table class="table table-striped">
+                <thread>
+                    <tr>
+                        <th>学年</th>
+                        <th>学部</th>
+                        <th>学科</th>
+                        <th>ユーザーID</th>
+                    </tr>
+                </thread>
+                <tbody>
+                    {% for x in profile %}
+                    <tr>
+                        <td>{{ x.grade }}</td>
+                        <td>{{ x.department }}</td>
+                        <td>{{ x.cource }}</td>
+                        <td>{{ x.user_id }}</td>
+
+                    </tr>
+                    {% else %}
+                    <td>no entry exist!</td>
+                    {% endfor %}
+                </tbody>
+            </table>
+       
+        </div>
+    </div>
+</div>
+{% endblock %}
