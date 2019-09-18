@@ -15,8 +15,8 @@ def now():
     return datetime.now().timestamp()
 
 
-class User(db.Model):
-    __tablename__ = 'user'
+class Users(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.String(37), nullable=False, primary_key=True)
     name = db.Column(db.Text, nullable=False)
     status=db.Column(db.Integer, nullable=False, default=1)
@@ -24,20 +24,20 @@ class User(db.Model):
 class Profile(db.Model):
     __tablename__ = 'profile'
     user_id = db.Column(db.String(37), nullable=False, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
-    grade = db.Column(db.Text, nullable=False)
-    department = db.Column(db.Text, nullable=False)
-    couse = db.Column(db.Text, nullable=False)
-    club = db.Column(db.Text, nullable=False)
+    name = db.Column(db.Text, nullable=True)
+    grade = db.Column(db.Integer, nullable=True)
+    department = db.Column(db.Text, nullable=True)
+    couse = db.Column(db.Text, nullable=True)
+    club = db.Column(db.Text, nullable=True)
 
-class Order(db.Model):
-    __tablename__ = 'order'
+class Orders(db.Model):
+    __tablename__ = 'orders'
     user_id = db.Column(db.String(37), nullable=False, primary_key=True)
     date = db.Column(db.Integer, nullable=False, primary_key=True)
     meal_id=db.Column(db.String(37), nullable=False,primary_key=True)
     status=db.Column(db.Integer, nullable=False, default=1)
     size=db.Column(db.Integer, nullable=False, default=1)
-    number=db.Column(db.Integer, nullable=False, default=1)
+    count=db.Column(db.Integer, nullable=False, default=1)
     timestamp=db.Column(db.Integer, nullable=False, default=now())
 
 

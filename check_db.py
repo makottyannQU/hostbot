@@ -14,11 +14,11 @@ s = Session()
 
 
 # # print a table
-# query = f'''
-#         select * from "meal";
-#         '''
-# df = pd.read_sql(query, db_engine)
-# print(df)
+query = f'''
+        select * from "meal";
+        '''
+df = pd.read_sql(query, db_engine)
+print(df)
 
 
 # # print a row
