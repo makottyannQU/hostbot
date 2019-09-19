@@ -1,7 +1,84 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="container main" style=" margin-top: 50px;">
+<div class="container main" style=" margin-top: 70px;">
     <div class="login-box col-md-12">
+        {% for x in ordered_menu %}
+        <table class="table table-bordered">
+            <h1>{{ ordered_menu_name_dict[x] }}</h1>
+            <thead>
+                <tr>
+                    <th>小</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                    {% for y in users_devide_menu_size[x][0] %}
+                    {{ loop.index }}
+                    {% if loop.index % 4 == 0 %}
+                    
+                    <tr>
+                        <td>{{ y}}</td>
+                        {% elif loop.index % 4 == 3 %}
+                        <td>{{ y }}</td>
+                    </tr>
+                    {% else %}
+                    <td>{{ y }}</td>
+                    {% endif %}
+                    {% endfor %}
+            </thead>
+            <tbody>
+           
+            </tbody>
+                <thead>
+                    <tr>
+                        <th>中</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                    {% for y in users_devide_menu_size[x][1] %}
+                    {{ loop.index }}
+                    {% if loop.index % 4 == 0 %}
+                    
+                    <tr>
+                        <td>{{ y}}</td>
+                    {% elif loop.index % 4 == 3 %}
+                        <td>{{ y }}</td>
+                    </tr>
+                    {% else %}
+                    <td>{{ y }}</td>
+                    {% endif %}
+                    {% endfor %}
+                
+                </tbody>
+                    <thead>
+                        <tr>
+                            <th>大</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for y in users_devide_menu_size[x][2] %}
+                    {{ loop.index }}
+                    {% if loop.index % 4 == 0 %}
+                    
+                    <tr>
+                        <td>{{ y}}</td>
+                        {% elif loop.index % 4 == 3 %}
+                        <td>{{ y }}</td>
+                    </tr>
+                    {% else %}
+                    <td>{{ y }}</td>
+                    {% endif %}
+                    {% endfor %}
+                    </tbody>
+        </table>
+
+
+        {% endfor %}
+
     </div>
 </div>
 {% endblock %}

@@ -248,7 +248,81 @@ def addmeal():
 
 @app.route('/ordercheck')
 def ordercheck():
-    return render_template('ordercheck.html')
+    date = 20190911
+    query = f'''
+            select * from menu inner join meal on date = {date} and menu.meal_id = meal.id;
+            '''
+    menu_df=pd.read_sql(query, db_engine)
+    if len(menu_df)>0:
+        query = f'''
+                select orders.meal_id, orders.size, sum(count) as count from ( select meal_id, size, count from orders
+                where date = {date} and status != -1) as orders group by orders.meal_id, orders.size;
+                '''
+        df = pd.read_sql(query, db_engine)
+        ordernum = {}
+        ordered_menu = []
+        ordered_menu_name_dict = {}
+        for index, row in menu_df.iterrows():
+            print("____")
+            print(row['name'])
+            ordered_menu.append(row.meal_id)
+            ordered_menu_name_dict[row.meal_id] = row['name']
+            id=row.meal_id
+            tmp=df[df['meal_id']==id]
+            if len(tmp)>0:
+                try:
+                    s_count=tmp[tmp['size']==0]['count'].iloc[0]
+                except:
+                    s_count=0
+                try:
+                    m_count = tmp[tmp['size'] == 1]['count'].iloc[0]
+                except:
+                    m_count = 0
+                try:
+                    l_count=tmp[tmp['size']==2]['count'].iloc[0]
+                except:
+                    l_count=0
+            else:
+                s_count=0
+                m_count=0
+                l_count=0
+            ordernum[id]={'s_count':s_count,'m_count':m_count,'l_count':l_count,'s_stock':row.s_stock,'m_stock':row.m_stock,'l_stock':row.l_stock}
+    else:
+        print('メニューがありません')
+
+    # for index, row in menu_df.iterrows():
+    #     id = row.meal_id
+        # print(ordernum[id])
+
+    # print(ordered_menu)
+    # print(ordered_menu_name_dict)
+
+    # order テーブルから指定された日付のデータ全部持ってくる
+    query = f'''
+            select * from orders inner join users on date = {date} and users.id = orders.user_id;
+            '''
+    users_groupby_menu = {}
+    
+    users_temp = []
+    users_devide_menu_size ={}
+    orders_table = pd.read_sql(query, db_engine)
+
+    for menu in ordered_menu:
+        users_devide_menu_size[menu] =[]
+        for x in range(3):
+            users_devide_menu_size[menu].append([])
+        for index, row in orders_table.iterrows():
+            if row.meal_id == menu:
+                if row['size'] == 0:
+                    users_devide_menu_size[menu][0].append(row.user_id)
+                elif row['size'] == 1:
+                    users_devide_menu_size[menu][1].append(row.user_id)
+                elif row['size'] == 2:
+                    users_devide_menu_size[menu][2].append(row.user_id)
+                else:
+                    print('弁当サイズ分類エラー')
+    print(users_devide_menu_size)
+    return render_template('ordercheck.html', orders_info=ordernum, ordered_menu=ordered_menu, ordered_menu_name_dict=ordered_menu_name_dict, users_devide_menu_size=users_devide_menu_size)
 
 
 @app.route('/update_calendar', methods=['POST'])
