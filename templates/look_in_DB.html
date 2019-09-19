@@ -57,6 +57,33 @@
             {% endfor %}
         </tbody>
     </table>
+    <h1>orders</h1>
+    <table class="table table-striped">
+        <thread>
+            <tr>
+                <th>ユーザーID</th>
+                <th>日付</th>
+                <th>弁当</th>
+                <th>サイズ</th>
+                <th>個数</th>
+                <th>ステータス</th>
+            </tr>
+        </thread>
+        <tbody>
+            {% for x in orders %}
+            <tr>
+                <td>{{ x.user_id }}</td>
+                <td>{{ x.date }}</td>
+                <td>{{ x.meal_id }}</td>
+                <td>{{ x.size }}</td>
+                <td>{{ x.count }}</td>
+                <td>{{ x.status }}</td>
+            </tr>
+            {% else %}
+            <td>no entry exist!</td>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 </div>
 

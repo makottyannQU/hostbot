@@ -51,6 +51,14 @@ function click_modal_edit(_date) {
     var day = date.slice(6, 8);
     let menu_count = 0;
 
+    //選択された日付に注文が入っているか確認
+    let exist_order_flag = false;
+    for (let i = 0; i < order_check_list.length; i++){
+        if (day == order_check_list[i]) {
+            exist_order_flag = true;
+        }
+    }
+
     //モーダルに日付を埋め込み(フォームにて使用)
     $('#date_for_register_edit').val(date);
 
@@ -80,7 +88,12 @@ function click_modal_edit(_date) {
         let L_td = '<td id="L_stock' + (i) + '"><input name= "L_stock' + (i) + '" class="form-control" value = ' + current_menu[i - 1].l_stock + '></td>';
         let delete_button = '<td><button type="button" class="btn btn-danger" onclick="delete_row(this)" value = ' + i + ' id="delete_button' + (i) + '">削除</button></td>';
         if (i == menu_count) {
-            document.getElementById('edit_meal_tr' + (i)).innerHTML = tr_new + S_td + M_td + L_td + delete_button;
+            if (exist_order_flag) {
+                document.getElementById('edit_meal_tr' + (i)).innerHTML = tr_new + S_td + M_td + L_td ;
+            } else {
+                document.getElementById('edit_meal_tr' + (i)).innerHTML = tr_new + S_td + M_td + L_td + delete_button;
+                
+            }
         } else {
             document.getElementById('edit_meal_tr' + (i)).innerHTML = tr_new + S_td + M_td + L_td;
         }

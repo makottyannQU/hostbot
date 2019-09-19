@@ -216,8 +216,11 @@ def look_in_DB():
     query = f'select * from "menu";'
     df = pd.read_sql(query, db_engine)
     menu = df.to_dict(orient='records')
+    query = f'select * from "orders";'
+    df = pd.read_sql(query, db_engine)
+    orders = df.to_dict(orient='records')
 
-    return render_template('look_in_DB.html', meals=meals, menu=menu)
+    return render_template('look_in_DB.html', meals=meals, menu=menu, orders=orders)
 
 
 @app.route('/addmeal', methods=['GET', 'POST'])
@@ -277,6 +280,22 @@ def update_calendar():
         "holiday": holiday
     }
 
+    #　orderテーブル
+    order_check_list = []
+    temp = 0
+    query = f'''
+            select * from orders where date between {ym}00 and {ym}32 ORDER BY date ASC
+            '''
+    df = pd.read_sql(query, db_engine)
+    print(df)
+    for index, row in df.iterrows():
+        day = int(str(row['date'])[-2:])
+        if temp != day:
+            order_check_list.append(day)
+        temp = day
+    
+    dict['order_check_list'] = order_check_list
+    print(order_check_list)
     return json.dumps(dict, ensure_ascii=False)
 
 
