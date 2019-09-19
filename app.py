@@ -248,7 +248,9 @@ def addmeal():
 
 @app.route('/ordercheck')
 def ordercheck():
-    date = 20190911
+    today1 = datetime.date.today()
+    today2 = "{0:%Y%m%d}".format(today1)
+    date = int(today2)
     query = f'''
             select * from menu inner join meal on date = {date} and menu.meal_id = meal.id;
             '''
@@ -289,39 +291,36 @@ def ordercheck():
             ordernum[id]={'s_count':s_count,'m_count':m_count,'l_count':l_count,'s_stock':row.s_stock,'m_stock':row.m_stock,'l_stock':row.l_stock}
     else:
         print('メニューがありません')
-
-    # for index, row in menu_df.iterrows():
-    #     id = row.meal_id
-        # print(ordernum[id])
-
-    # print(ordered_menu)
-    # print(ordered_menu_name_dict)
+        return render_template('ordercheck.html')
 
     # order テーブルから指定された日付のデータ全部持ってくる
     query = f'''
             select * from orders inner join users on date = {date} and users.id = orders.user_id;
             '''
     users_groupby_menu = {}
-    
     users_temp = []
     users_devide_menu_size ={}
+    users_row_temp = []
     orders_table = pd.read_sql(query, db_engine)
 
-    for menu in ordered_menu:
-        users_devide_menu_size[menu] =[]
-        for x in range(3):
-            users_devide_menu_size[menu].append([])
-        for index, row in orders_table.iterrows():
-            if row.meal_id == menu:
-                if row['size'] == 0:
-                    users_devide_menu_size[menu][0].append(row.user_id)
-                elif row['size'] == 1:
-                    users_devide_menu_size[menu][1].append(row.user_id)
-                elif row['size'] == 2:
-                    users_devide_menu_size[menu][2].append(row.user_id)
-                else:
-                    print('弁当サイズ分類エラー')
-    print(users_devide_menu_size)
+    if(len(ordered_menu) >0):
+        for menu in ordered_menu:
+            users_devide_menu_size[menu] =[]
+            for x in range(3):
+                users_devide_menu_size[menu].append([])
+            for index, row in orders_table.iterrows():
+                if row.meal_id == menu:
+                    if row['size'] == 0:
+                        users_devide_menu_size[menu][0].append(row.user_id)
+                    elif row['size'] == 1:
+                        users_devide_menu_size[menu][1].append(row.user_id)
+                    elif row['size'] == 2:
+                        users_devide_menu_size[menu][2].append(row.user_id)
+                    else:
+                        print('弁当サイズ分類エラー')
+        print(users_devide_menu_size)
+    else:
+        print('注文データなし')
     return render_template('ordercheck.html', orders_info=ordernum, ordered_menu=ordered_menu, ordered_menu_name_dict=ordered_menu_name_dict, users_devide_menu_size=users_devide_menu_size)
 
 

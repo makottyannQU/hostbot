@@ -12,9 +12,7 @@
                     <th></th>
                 </tr>
                     {% for y in users_devide_menu_size[x][0] %}
-                    {{ loop.index }}
                     {% if loop.index % 4 == 0 %}
-                    
                     <tr>
                         <td>{{ y}}</td>
                         {% elif loop.index % 4 == 3 %}
@@ -36,11 +34,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                
                     {% for y in users_devide_menu_size[x][1] %}
-                    {{ loop.index }}
                     {% if loop.index % 4 == 0 %}
-                    
                     <tr>
                         <td>{{ y}}</td>
                     {% elif loop.index % 4 == 3 %}
@@ -61,9 +56,7 @@
                     </thead>
                     <tbody>
                     {% for y in users_devide_menu_size[x][2] %}
-                    {{ loop.index }}
                     {% if loop.index % 4 == 0 %}
-                    
                     <tr>
                         <td>{{ y}}</td>
                         {% elif loop.index % 4 == 3 %}
