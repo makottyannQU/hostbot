@@ -24,15 +24,21 @@ $(function () {
                 alert("未選択のメニューが存在します。");
                 return false;
             }
+            //半角英数字バリデーション
             let s_stock_val = $(`input[name="S_stock${i}"]`).val();
             let m_stock_val = $(`input[name="M_stock${i}"]`).val();
             let l_stock_val = $(`input[name="L_stock${i}"]`).val();
             if (s_stock_val.match(/[^0-9]+/)) {
-
                 alert("在庫数には半角数字を入力してください。"); 
                 return false;
-            } else {
-                alert("k");
+            }
+            if (m_stock_val.match(/[^0-9]+/)) {
+                alert("在庫数には半角数字を入力してください。");
+                return false;
+            }
+            if (l_stock_val.match(/[^0-9]+/)) {
+                alert("在庫数には半角数字を入力してください。");
+                return false;
             }
         }
         console.log(selected_menu);
