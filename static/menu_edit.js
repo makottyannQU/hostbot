@@ -1,5 +1,5 @@
 $(function () {
-    
+
     $('#modal2').on('hide.bs.modal', function () {
         console.log("モーダルフェイドアウト時実行2");
         for (let i = 1; i <= 5; i++) {
@@ -53,10 +53,16 @@ function click_modal_edit(_date) {
 
     //選択された日付に注文が入っているか確認
     let exist_order_flag = false;
-    for (let i = 0; i < order_check_list.length; i++){
+    for (let i = 0; i < order_check_list.length; i++) {
         if (day == order_check_list[i]) {
             exist_order_flag = true;
         }
+    }
+    //
+    if (exist_order_flag) {
+        $('#order_flag').val(1);
+    } else {
+        $('#order_flag').val(0);
     }
 
     //モーダルに日付を埋め込み(フォームにて使用)
@@ -80,19 +86,33 @@ function click_modal_edit(_date) {
     //menu個数埋め込み
     $('#menu_count').val(menu_count);
 
-    //要素の作成
+    //モーダル要素の作成
     for (let i = 1; i <= menu_count; i++) {
         var tr_new = '<td id="edit_meal_td' + (i) + '" class="edit_meal_td" style="padding-right: 30px;"><select class="form-control" name="edit_meal' + (i) + '" id="edit_meal' + (i) + '" onChange="changemeal(this);"><option value="">未選択</option></select></td>';
-        let S_td = '<td id="S_stock' + (i) + '"><input name= "S_stock' + (i) + '" class="form-control" value = ' + current_menu[i - 1].s_stock + '></td>';
-        let M_td = '<td id="M_stock' + (i) + '"><input name= "M_stock' + (i) + '" class="form-control" value = ' + current_menu[i - 1].m_stock + '></td>';
-        let L_td = '<td id="L_stock' + (i) + '"><input name= "L_stock' + (i) + '" class="form-control" value = ' + current_menu[i - 1].l_stock + '></td>';
+        let S_td = '<td id="S_stock' + (i) + '">\
+            <div class = "input-group"><input name= "S_stock' + (i) + '" class = "form-control" value = ' + current_menu[i - 1].s_stock + '>\
+            <span class = "input-group-addon">'+ current_menu[i - 1].s_orders + '</span>\
+            </div>\
+            </td>';
+        let M_td = '<td id="M_stock' + (i) + '">\
+            <div class = "input-group"><input name= "M_stock' + (i) + '" class = "form-control" value = ' + current_menu[i - 1].m_stock + '>\
+            <span class = "input-group-addon">'+ current_menu[i - 1].m_orders + '</span>\
+            </div>\
+            </td>';
+        let L_td = '<td id="L_stock' + (i) + '">\
+            <div class = "input-group"><input name= "L_stock' + (i) + '" class = "form-control" value = ' + current_menu[i - 1].l_stock + '>\
+            <span class = "input-group-addon">'+ current_menu[i - 1].l_orders + '</span>\
+            </div>\
+            </td>';
         let delete_button = '<td><button type="button" class="btn btn-danger" onclick="delete_row(this)" value = ' + i + ' id="delete_button' + (i) + '">削除</button></td>';
+        //最後の行のみ削除ボタンをつける
         if (i == menu_count) {
+            //注文の有無によって削除ボタンの有無を決定
             if (exist_order_flag) {
-                document.getElementById('edit_meal_tr' + (i)).innerHTML = tr_new + S_td + M_td + L_td ;
+                document.getElementById('edit_meal_tr' + (i)).innerHTML = tr_new + S_td + M_td + L_td;
             } else {
                 document.getElementById('edit_meal_tr' + (i)).innerHTML = tr_new + S_td + M_td + L_td + delete_button;
-                
+
             }
         } else {
             document.getElementById('edit_meal_tr' + (i)).innerHTML = tr_new + S_td + M_td + L_td;
@@ -142,12 +162,30 @@ var plus_meal_editmode = function () {
 
     // 新しいtr要素を生成
     var tr_new = '<td id="edit_meal_td' + (count) + '" class="edit_meal_td" style="padding-right: 30px;"><select class="form-control" name="edit_meal' + (count) + '" id="edit_meal' + (count) + '" onChange="changemeal_editmode(this);"><option value="">未選択</option></select></td>';
-    let S_td = '<td id="S_stock' + (count) + '"><input name= "S_stock' + (count) + '" class="form-control" value = 0></td>';
-    let M_td = '<td id="M_stock' + (count) + '"><input name= "M_stock' + (count) + '" class="form-control" value = 0></td>';
-    let L_td = '<td id="L_stock' + (count) + '"><input name= "L_stock' + (count) + '" class="form-control" value = 0></td>';
+    let S_td = '<td id="S_stock' + (count) + '">\
+     <div class = "input-group"><input name= "S_stock' + (count) + '" class = "form-control" value = 0>\
+            <span class = "input-group-addon">0</span>\
+            </div>\
+    </td>';
+    let M_td = '<td id="M_stock' + (count) + '">\
+   <div class = "input-group"><input name= "M_stock' + (count) + '" class = "form-control" value = 0>\
+            <span class = "input-group-addon">0</span>\
+            </div>\
+    </td>';
+    let L_td = '<td id="L_stock' + (count) + '">\
+    <div class = "input-group"><input name= "L_stock' + (count) + '" class = "form-control" value = 0>\
+            <span class = "input-group-addon">0</span>\
+            </div>\
+    </td>';
+    var order_flag = $("#order_flag").val();
     let delete_button = '<td><button type="button" class="btn btn-danger" onclick="delete_row(this)" value = ' + count + ' id="delete_button' + (count) + '">削除</button></td>'
-    document.getElementById('edit_meal_tr' + (count)).innerHTML = tr_new + S_td + M_td + L_td + delete_button;
+    if (order_flag == 0) {
+        document.getElementById('edit_meal_tr' + (count)).innerHTML = tr_new + S_td + M_td + L_td + delete_button;        
+    } else if (order_flag == 1) {
+        document.getElementById('edit_meal_tr' + (count)).innerHTML = tr_new + S_td + M_td + L_td;                
+    }
     var select = $('#edit_meal' + (count));
+
     for (let row of meals) {
         var op = document.createElement("option");
         op.value = row.id;

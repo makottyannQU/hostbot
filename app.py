@@ -347,7 +347,7 @@ def update_calendar():
             type = 'green'
         else:
             type = 'red'
-        menus.append({"day": day, "title": menu,"meal_id":row["meal_id"],
+        menus.append({"day": day, "title": menu, "meal_id": row["meal_id"], "s_orders": 0, "m_orders": 0, "l_orders": 0,
                       "s_stock": row["s_stock"], "m_stock": row["m_stock"], "l_stock": row["l_stock"], "type": type})
 
     dict = {
@@ -360,12 +360,12 @@ def update_calendar():
 
     #　orderテーブル
     order_check_list = []  
-    order_check_count_dict = {}
-    for i in range(1, 31):
-        order_check_count_dict[i] = {}
-    for x in menus:
+    # order_check_count_dict = {}
+    # for i in range(1, 31):
+        # order_check_count_dict[i] = {}
+    # for x in menus:
         # print(x['meal_id'])
-        order_check_count_dict[int(x['day'])][x['meal_id']] = [0,0,0]  
+        # order_check_count_dict[int(x['day'])][x['meal_id']] = [0,0,0]  
     temp = 0
     query = f'''
             select * from orders where date between {ym}00 and {ym}32 ORDER BY date ASC
@@ -375,12 +375,24 @@ def update_calendar():
     # print(order_check_count_dict)
     for index, row in df.iterrows():
         day = int(str(row['date'])[-2:])
+        meal_id = row['meal_id']
+       
         if row['size'] == 0:
-            order_check_count_dict[day][row['meal_id']][0] += 1
+            # order_check_count_dict[day][row['meal_id']][0] += 1
+            for y in dict['event']:
+                if int(y['day']) == day and y['meal_id'] == meal_id:
+                    y['s_orders'] +=1
         elif row['size'] == 1:
-            order_check_count_dict[day][row['meal_id']][1] += 1
+            # order_check_count_dict[day][row['meal_id']][1] += 1
+            for y in dict['event']:
+                if int(y['day']) == day and y['meal_id'] == meal_id:
+                    y['m_orders'] += 1
+                    print('addorder')
         elif row['size'] == 2:
-            order_check_count_dict[day][row['meal_id']][2] += 1
+            # order_check_count_dict[day][row['meal_id']][2] += 1
+            for y in dict['event']:
+                if int(y['day']) == day and y['meal_id'] == meal_id:
+                    y['l_orders'] +=1
         else:
             print('sizeエラー')
         if temp != day:
@@ -390,9 +402,9 @@ def update_calendar():
         # order_check_count_dict[day] +=1
     
     dict['order_check_list'] = order_check_list
-    dict['order_check_count_dict'] = order_check_count_dict
-    print(order_check_list)
-    print(order_check_count_dict)
+    # dict['order_check_count_dict'] = order_check_count_dict
+    # print(order_check_list)
+    # print(order_check_count_dict)
 
     return json.dumps(dict, ensure_ascii=False)
 
