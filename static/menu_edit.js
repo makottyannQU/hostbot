@@ -19,6 +19,21 @@ $(function () {
         let selected_menu = []
         for (let i = 1; i <= menu_count; i++) {
             selected_menu.push($('#edit_meal' + (i)).val());
+            //未選択チェック
+            if (!$('#edit_meal' + (i)).val()) {
+                alert("未選択のメニューが存在します。");
+                return false;
+            }
+            let s_stock_val = $(`input[name="S_stock${i}"]`).val();
+            let m_stock_val = $(`input[name="M_stock${i}"]`).val();
+            let l_stock_val = $(`input[name="L_stock${i}"]`).val();
+            if (s_stock_val.match(/[^0-9]+/)) {
+
+                alert("在庫数には半角数字を入力してください。"); 
+                return false;
+            } else {
+                alert("k");
+            }
         }
         console.log(selected_menu);
 

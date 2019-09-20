@@ -315,11 +315,26 @@ def ordercheck():
             for index, row in orders_table.iterrows():
                 if row.meal_id == menu:
                     if row['size'] == 0:
-                        users_devide_menu_size[menu][0].append(row.user_id)
+                        if row['count'] == 1:
+                            users_devide_menu_size[menu][0].append(row.user_id)
+                        else:
+                            tmp_str = row.user_id + "___" + \
+                                str(row.count) + "_orders"
+                            users_devide_menu_size[menu][0].append(tmp_str)
                     elif row['size'] == 1:
-                        users_devide_menu_size[menu][1].append(row.user_id)
+                        if row['count'] == 1:
+                            users_devide_menu_size[menu][1].append(row.user_id)
+                        else:
+                            tmp_str = row.user_id + "___" + \
+                                str(row.count) + "_orders"
+                            users_devide_menu_size[menu][1].append(tmp_str)
                     elif row['size'] == 2:
-                        users_devide_menu_size[menu][2].append(row.user_id)
+                        if row['count'] == 1:
+                                users_devide_menu_size[menu][2].append(row.user_id)
+                        else:
+                            tmp_str = row.user_id + "___" + \
+                                str(row.count) + "_orders"
+                            users_devide_menu_size[menu][2].append(tmp_str)
                     else:
                         print('弁当サイズ分類エラー')
         print(users_devide_menu_size)
@@ -381,18 +396,18 @@ def update_calendar():
             # order_check_count_dict[day][row['meal_id']][0] += 1
             for y in dict['event']:
                 if int(y['day']) == day and y['meal_id'] == meal_id:
-                    y['s_orders'] +=1
+                    y['s_orders'] += row['count']
         elif row['size'] == 1:
             # order_check_count_dict[day][row['meal_id']][1] += 1
             for y in dict['event']:
                 if int(y['day']) == day and y['meal_id'] == meal_id:
-                    y['m_orders'] += 1
+                    y['m_orders'] += row['count']
                     print('addorder')
         elif row['size'] == 2:
             # order_check_count_dict[day][row['meal_id']][2] += 1
             for y in dict['event']:
                 if int(y['day']) == day and y['meal_id'] == meal_id:
-                    y['l_orders'] +=1
+                    y['l_orders'] += row['count']
         else:
             print('sizeエラー')
         if temp != day:

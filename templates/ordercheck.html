@@ -6,14 +6,14 @@
         <table class="table table-bordered">
             <h1>{{ ordered_menu_name_dict[x] }}</h1>
             <thead>
-                <tr>
+                <tr class="warning">
                     <th>小</th>
                     <th></th>
                     <th></th>
                 </tr>
                     {% for y in users_devide_menu_size[x][0] %}
                     {% if loop.index % 4 == 0 %}
-                    <tr>
+                    <tr  class="table-info">
                         <td>{{ y}}</td>
                         {% elif loop.index % 4 == 3 %}
                         <td>{{ y }}</td>
@@ -27,7 +27,7 @@
            
             </tbody>
                 <thead>
-                    <tr>
+                    <tr class="warning">
                         <th>中</th>
                         <th></th>
                         <th></th>
@@ -36,7 +36,7 @@
                 <tbody>
                     {% for y in users_devide_menu_size[x][1] %}
                     {% if loop.index % 4 == 0 %}
-                    <tr>
+                    <tr class="success">
                         <td>{{ y}}</td>
                     {% elif loop.index % 4 == 3 %}
                         <td>{{ y }}</td>
@@ -48,7 +48,7 @@
                 
                 </tbody>
                     <thead>
-                        <tr>
+                        <tr class="warning">
                             <th>大</th>
                             <th></th>
                             <th></th>
@@ -57,7 +57,7 @@
                     <tbody>
                     {% for y in users_devide_menu_size[x][2] %}
                     {% if loop.index % 4 == 0 %}
-                    <tr>
+                    <tr class="success">
                         <td>{{ y}}</td>
                         {% elif loop.index % 4 == 3 %}
                         <td>{{ y }}</td>
