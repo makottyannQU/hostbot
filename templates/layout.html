@@ -38,7 +38,7 @@
                     <a href="/meal">
                         <button type="button" class="btn btn-default navbar-btn">弁当登録</button>
                     </a>
-                    <a href="/ordercheck">
+                    <a href="/ordercheck?date=0" id = "ordercheck_href">
                         <button type="button" class="btn btn-default navbar-btn">注文確認</button>
                     </a>
                     <!-- デバック時使用 -->
@@ -54,3 +54,13 @@
 </body>
 
 </html>
+<script type="text/javascript">
+　 $(function () {
+        let today = new Date();
+        console.log(today);
+        let yeay = today.getFullYear()
+        let month = ('00' + (today.getMonth() + 1)).slice(-2);
+        let day = ('00' + today.getDate()).slice(-2);
+        $("#ordercheck_href").attr("href", "/ordercheck?date="+ yeay+ month+day)
+    });
+</script>

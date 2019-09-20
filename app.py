@@ -248,9 +248,13 @@ def addmeal():
 
 @app.route('/ordercheck')
 def ordercheck():
+    default_date = request.args.get('date')
     today1 = datetime.date.today()
     today2 = "{0:%Y%m%d}".format(today1)
-    date = int(today2)
+    if default_date == 0:
+        date = int(today2)
+    else :
+        date = int(default_date)
     query = f'''
             select * from menu inner join meal on date = {date} and menu.meal_id = meal.id;
             '''
@@ -291,7 +295,7 @@ def ordercheck():
             ordernum[id]={'s_count':s_count,'m_count':m_count,'l_count':l_count,'s_stock':row.s_stock,'m_stock':row.m_stock,'l_stock':row.l_stock}
     else:
         print('メニューがありません')
-        return render_template('ordercheck.html')
+        return render_template('no_order_view.html')
 
     # order テーブルから指定された日付のデータ全部持ってくる
     query = f'''
@@ -331,7 +335,7 @@ def update_calendar():
     holiday = [str(x[0].day) for x in jpholiday.month_holidays(year, month)]
     ym = f'{year:04d}{month:02d}'
     query = f'''
-            select menu.date, "meal".name, "menu".s_stock,"menu".m_stock ,"menu".l_stock from ( select * from "menu" where date between {ym}00 and {ym}32)
+            select menu.date, "meal".name,"menu".meal_id, "menu".s_stock,"menu".m_stock ,"menu".l_stock from ( select * from "menu" where date between {ym}00 and {ym}32)
             as menu inner join "meal" on menu.meal_id = "meal".id;
             '''
     df = pd.read_sql(query, db_engine)
@@ -343,7 +347,7 @@ def update_calendar():
             type = 'green'
         else:
             type = 'red'
-        menus.append({"day": day, "title": menu,
+        menus.append({"day": day, "title": menu,"meal_id":row["meal_id"],
                       "s_stock": row["s_stock"], "m_stock": row["m_stock"], "l_stock": row["l_stock"], "type": type})
 
     dict = {
@@ -353,22 +357,43 @@ def update_calendar():
         "holiday": holiday
     }
 
+
     #　orderテーブル
-    order_check_list = []
+    order_check_list = []  
+    order_check_count_dict = {}
+    for i in range(1, 31):
+        order_check_count_dict[i] = {}
+    for x in menus:
+        # print(x['meal_id'])
+        order_check_count_dict[int(x['day'])][x['meal_id']] = [0,0,0]  
     temp = 0
     query = f'''
             select * from orders where date between {ym}00 and {ym}32 ORDER BY date ASC
             '''
     df = pd.read_sql(query, db_engine)
     print(df)
+    # print(order_check_count_dict)
     for index, row in df.iterrows():
         day = int(str(row['date'])[-2:])
+        if row['size'] == 0:
+            order_check_count_dict[day][row['meal_id']][0] += 1
+        elif row['size'] == 1:
+            order_check_count_dict[day][row['meal_id']][1] += 1
+        elif row['size'] == 2:
+            order_check_count_dict[day][row['meal_id']][2] += 1
+        else:
+            print('sizeエラー')
         if temp != day:
             order_check_list.append(day)
         temp = day
+        # order_check_count_dict[day].append({})
+        # order_check_count_dict[day] +=1
     
     dict['order_check_list'] = order_check_list
+    dict['order_check_count_dict'] = order_check_count_dict
     print(order_check_list)
+    print(order_check_count_dict)
+
     return json.dumps(dict, ensure_ascii=False)
 
 
