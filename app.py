@@ -219,8 +219,11 @@ def look_in_DB():
     query = f'select * from "orders";'
     df = pd.read_sql(query, db_engine)
     orders = df.to_dict(orient='records')
+    query = f'select * from "users";'
+    df = pd.read_sql(query, db_engine)
+    users = df.to_dict(orient='records')
 
-    return render_template('look_in_DB.html', meals=meals, menu=menu, orders=orders)
+    return render_template('look_in_DB.html', meals=meals, menu=menu, orders=orders, users=users)
 
 
 @app.route('/addmeal', methods=['GET', 'POST'])
@@ -295,9 +298,10 @@ def ordercheck():
             ordernum[id]={'s_count':s_count,'m_count':m_count,'l_count':l_count,'s_stock':row.s_stock,'m_stock':row.m_stock,'l_stock':row.l_stock}
     else:
         print('メニューがありません')
-        return render_template('no_order_view.html')
+        return render_template('no_order_view.html', date=date)
 
     # order テーブルから指定された日付のデータ全部持ってくる
+    print(date)
     query = f'''
             select * from orders inner join users on date = {date} and users.id = orders.user_id;
             '''
@@ -306,7 +310,7 @@ def ordercheck():
     users_devide_menu_size ={}
     users_row_temp = []
     orders_table = pd.read_sql(query, db_engine)
-
+    print(orders_table)
     if(len(ordered_menu) >0):
         for menu in ordered_menu:
             users_devide_menu_size[menu] =[]
@@ -340,7 +344,7 @@ def ordercheck():
         print(users_devide_menu_size)
     else:
         print('注文データなし')
-    return render_template('ordercheck.html', orders_info=ordernum, ordered_menu=ordered_menu, ordered_menu_name_dict=ordered_menu_name_dict, users_devide_menu_size=users_devide_menu_size)
+    return render_template('ordercheck.html', orders_info=ordernum, ordered_menu=ordered_menu, ordered_menu_name_dict=ordered_menu_name_dict, users_devide_menu_size=users_devide_menu_size, date=date)
 
 
 @app.route('/update_calendar', methods=['POST'])

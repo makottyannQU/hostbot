@@ -29,7 +29,7 @@ $(function () {
             let m_stock_val = $(`input[name="M_stock${i}"]`).val();
             let l_stock_val = $(`input[name="L_stock${i}"]`).val();
             if (s_stock_val.match(/[^0-9]+/)) {
-                alert("在庫数には半角数字を入力してください。"); 
+                 alert("在庫数には半角数字を入力してください。"); 
                 return false;
             }
             if (m_stock_val.match(/[^0-9]+/)) {
@@ -53,11 +53,11 @@ $(function () {
 
         if (selected_menu.length == duplicate_check_array.length) {
             console.log("メニュー変更開始");
-            return true;
+            return true;  
         } else {
             alert("重複しているメニューがあります。正しく入力してください。");
             return false;
-        }
+        } 
     })
 })
 
@@ -141,12 +141,21 @@ function click_modal_edit(_date) {
         var select = $('#edit_meal' + (i));
         for (let row of meals) {
             let op = document.createElement("option");
-            op.value = row.id;
-            op.text = row.name;
-            if (current_menu[i - 1].title == row.name) {
-                op.selected = true;
+            if (exist_order_flag) {
+                if (current_menu[i - 1].title == row.name) {
+                    op.value = row.id;
+                    op.text = row.name;
+                    op.selected = true;
+                    select.append(op);
+                }
+            } else {
+                op.value = row.id;
+                op.text = row.name;
+                if (current_menu[i - 1].title == row.name) {
+                    op.selected = true;
+                }
+                select.append(op);
             }
-            select.append(op);
 
         }
     }

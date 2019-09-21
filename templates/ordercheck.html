@@ -1,7 +1,19 @@
 {% extends "layout.html" %}
 {% block content %}
+
+
 <div class="container main" style=" margin-top: 70px;">
     <div class="login-box col-md-12">
+        <section class="section">
+            <div class="section__block section__block--scoped">
+                <h3>注文確認 {{ date }}</h3>
+                <fieldset class="fieldset fieldset--demo">
+                    <div class="fieldset__wrapper">
+                        <input onchange ="change_url_palam()"id="_pickadate" class="fieldset__input js__datepicker" type="text" placeholder="Try me&hellip;">
+                    </div>
+                </fieldset>
+            </div>
+        </section>
         {% for x in ordered_menu %}
         <table class="table table-bordered">
             <h1>{{ ordered_menu_name_dict[x] }}</h1>
@@ -68,10 +80,19 @@
                     {% endfor %}
                     </tbody>
         </table>
-
-
         {% endfor %}
-
     </div>
 </div>
+<script type="text/javascript">
+    $(function () {
+        $('#_pickadate').pickadate();
+    });
+    function change_url_palam(){
+        let date = $('#_pickadate').val();
+        date = date.replace("月","");
+        date = date.replace("年","");
+        date = date.replace("日","");
+        location.href = "/ordercheck?date="+date;
+    }
+</script>
 {% endblock %}

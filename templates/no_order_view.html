@@ -4,10 +4,33 @@
     <div class="login-box col-md-12">
             <section class="jumbotron text-center">
                 <div class="container">
+                    <section class="section">
+                        <div class="section__block section__block--scoped">
+                            <h3>注文確認 {{ date }}</h3>
+                            <fieldset class="fieldset fieldset--demo">
+                                <div class="fieldset__wrapper">
+                                    <input onchange="change_url_palam()" valeu = "{{ date }}" id="_pickadate" class="fieldset__input js__datepicker" type="text"
+                                        placeholder="{{ date }}&hellip;">
+                                </div>
+                            </fieldset>
+                        </div>
+                    </section>
                     <h1 class="jumbotron-heading">注文はありません</h1>
                    
                 </div>
             </section>
     </div>
 </div>
+<script type="text/javascript">
+    $(function () {
+        $('#_pickadate').pickadate();
+    });
+    function change_url_palam() {
+        let date = $('#_pickadate').val();
+        date = date.replace("月", "");
+        date = date.replace("年", "");
+        date = date.replace("日", "");
+        location.href = "/ordercheck?date=" + date;
+    }
+</script>
 {% endblock %}
