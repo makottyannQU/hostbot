@@ -1,0 +1,3 @@
+# hostbot
+
+/ordercheckで表示するユーザーはordersテーブルとusersテーブルの紐付け(inner join)で表示しているため、注文があってもusersテーブルにないユーザーは表示されない
